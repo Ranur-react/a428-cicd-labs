@@ -6,6 +6,8 @@ node{
             sh 'npm install'
             }
         }
+        buildImage.stop()
+        buildImage.remove(force: true)
     // try{
     //     buildImage=docker.image('node:16-buster-slim').run('-p 3000:3000')
     //     stage('Build'){
