@@ -16,17 +16,17 @@
 //     }
 // }
 
-node{
-    agent{
-        docker{
-            image 'node:16-buster-slim'
-            args '-p 3000:3000'
-        }
-    }
-    stage('Build'){
-            sh 'npm install'
-    }
-}
+// node{
+//     agent{
+//         docker{
+//             image 'node:16-buster-slim'
+//             args '-p 3000:3000'
+//         }
+//     }
+//     stage('Build'){
+//             sh 'npm install'
+//     }
+// }
 
 
 // node {
@@ -49,3 +49,26 @@ node{
 //         }
 //     }
 // }
+
+
+node {
+    // Define the Docker agent
+    docker.image('node:16-buster-slim').run('-p 3000:3000').inside {
+        // Checkout the Git repository
+        checkout scm
+
+        // Install dependencies and build the React.js project
+        stage('Build') {
+            sh 'npm install'
+            sh 'npm run build'
+        }
+
+        // Optionally, you can add more stages or post-build actions
+        stage('Test') {
+            sh 'npm test'
+        }
+
+        // Archive the build artifacts, if needed
+        archiveArtifacts '**/build/**'
+    }
+}
