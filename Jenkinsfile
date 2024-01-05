@@ -52,23 +52,32 @@
 
 
 node {
-    // Define the Docker agent
-    docker.image('node:16-buster-slim').withRun('-p 3000:3000').inside {
-        // Checkout the Git repository
-        checkout scm
+    def buildImage
+    try{
+        // Define the Docker agent
+            buildImage= docker.image('node:16-buster-slim').withRun('-p 3000:3000').inside {
+                // Checkout the Git repository
+                checkout scm
 
-        // Install dependencies and build the React.js project
-        stage('Build') {
-            sh 'npm install'
-            sh 'npm run build'
+                // Install dependencies and build the React.js project
+                stage('Build') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+
+                // Optionally, you can add more stages or post-build actions
+                stage('Test') {
+                    sh 'npm test'
+                }
+
+                // Archive the build artifacts, if needed
+                archiveArtifacts '**/build/**'
+            }
+    } finally {
+            // Stop and remove the Docker container after execution
+            if (buildImage != null) {
+                buildImage.stop()
+                buildImage.remove(force: true)
+            }
         }
-
-        // Optionally, you can add more stages or post-build actions
-        stage('Test') {
-            sh 'npm test'
-        }
-
-        // Archive the build artifacts, if needed
-        archiveArtifacts '**/build/**'
-    }
 }
