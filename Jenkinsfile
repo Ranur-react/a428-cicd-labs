@@ -83,14 +83,16 @@
 // }
 node {
     // Define the Docker agent
-    docker.image('node:16-buster-slim').inside {
-        // Checkout the Git repository
-        checkout scm
+    docker.image('node:16-buster-slim').withRun('-p 3000:3000') { c ->
+        docker.image('node:16-buster-slim').inside {
+            // Checkout the Git repository
+            checkout scm
 
-        // Build the React.js project
-        stage('Build') {
-            sh 'npm install'
-            sh 'npm run build'
+            // Build the React.js project
+            stage('Build') {
+                sh 'npm install'
+                sh 'npm run build'
+            }
         }
     }
 }
