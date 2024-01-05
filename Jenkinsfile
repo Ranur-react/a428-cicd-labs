@@ -1,8 +1,9 @@
 node{
     def buildImage
- stage('Build'){
+    stage('Build'){
+            buildImage=docker.image('node:16-buster-slim').run('-p 3000:3000')            
         try{
-            buildImage=docker.image('node:16-buster-slim').run('-p 3000:3000')            buildImage.inside{
+            buildImage.inside{
                 sh 'npm install'
                 }
             
