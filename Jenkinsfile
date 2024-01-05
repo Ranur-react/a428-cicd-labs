@@ -93,6 +93,9 @@ node {
                 sh 'npm install'
                 sh 'npm run build'
             }
+            stage('Test'){
+                sh './jenkins/scripts/test.sh'
+            }
         }
     }
 }
