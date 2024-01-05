@@ -10,6 +10,6 @@ node{
                 buildImage.stop()
                 buildImage.remove(force: true)
             }
-        }|
+        }
     }
 }
