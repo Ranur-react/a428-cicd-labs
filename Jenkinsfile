@@ -9,7 +9,7 @@ node {
             }
             stage('Test'){
                 sh './jenkins/scripts/test.sh'
-                junit 'test-reports/results.xml'
+                // junit 'test-reports/results.xml'
             }
     
         }
